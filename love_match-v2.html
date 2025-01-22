@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Match Calculator</title>
+    <style>
+        :root {
+            --primary: #ffb5c2;
+            --primary-dark: #ff8fa3;
+            --secondary: #b5e5ff;
+            --accent: #ffd6e0;
+            --text: #4a4a4a;
+            --background: #fff5f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(255, 181, 194, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 181, 194, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="button"] {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        button[type="reset"] {
+            background-color: var(--secondary);
+            color: var(--text);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .instructions h3 {
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .instructions p {
+            margin-bottom: 10px;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--accent);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heart-icon {
+            color: var(--primary);
+            font-size: 1.5em;
+            margin: 0 5px;
+        }
+
+        .compatibility-meter {
+            margin-top: 15px;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .compatibility-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>❤️ Love Match Calculator</h1>
+        <form id="compatibilityForm">
+            <div class="form-group">
+                <label for="name1">Person 1 Name:</label>
+                <input type="text" id="name1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name2">Person 2 Name:</label>
+                <input type="text" id="name2" required>
+            </div>
+
+            <div class="form-group">
+                <label for="traits1">Person 1 Traits (comma separated):</label>
+                <input type="text" id="traits1" placeholder="Extraversion, Agreeableness, ..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="traits2">Person 2 Traits (comma separated):</label>
+                <input type="text" id="traits2" placeholder="Extraversion, Agreeableness, ..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="behavior1">Person 1 Behavior (comma separated):</label>
+                <input type="text" id="behavior1" placeholder="Try new things, Group activities, ..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="behavior2">Person 2 Behavior (comma separated):</label>
+                <input type="text" id="behavior2" placeholder="Try new things, Group activities, ..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="interests1">Person 1 Interests:</label>
+                <input type="text" id="interests1" placeholder="e.g., reading, sports" required>
+            </div>
+
+            <div class="form-group">
+                <label for="interests2">Person 2 Interests:</label>
+                <input type="text" id="interests2" placeholder="e.g., reading, sports" required>
+            </div>
+
+            <div class="button-group">
+                <button type="button" onclick="calculateCompatibility()">Calculate Match</button>
+                <button type="reset">Reset</button>
+                <button type="button" onclick="showInstructions()">Instructions</button>
+            </div>
+        </form>
+
+        <div id="instructions" class="instructions">
+            <h3>Personality Traits:</h3>
+            <p><strong>Extraversion:</strong> Tendency to be outgoing and energetic.</p>
+            <p><strong>Agreeableness:</strong> Tendency to be compassionate and cooperative.</p>
+            <p><strong>Conscientiousness:</strong> Tendency to be organized, responsible, and hardworking.</p>
+            <p><strong>Neuroticism:</strong> Tendency to experience emotional instability and anxiety.</p>
+            <p><strong>Openness:</strong> Tendency to be open-minded and curious about new experiences.</p>
+            <p><strong>Emotional Stability:</strong> Ability to remain calm and composed under stress.</p>
+            <p><strong>Resilience:</strong> Ability to recover from adversity and bounce back from challenges.</p>
+            <p><strong>Leadership:</strong> Ability to guide and influence others in a positive direction.</p>
+            <p><strong>Adaptability:</strong> Ability to adjust to new situations and changes easily.</p>
+
+            <h3>Behavioral Traits:</h3>
+            <p><strong>Try new things:</strong> Willingness to engage in new experiences.</p>
+            <p><strong>Group activities:</strong> Preference for social interactions and group settings.</p>
+            <p><strong>Honesty:</strong> Openness and truthfulness in communication.</p>
+            <p><strong>Communication:</strong> Ability to clearly express ideas and listen to others.</p>
+            <p><strong>Trust:</strong> Confidence in others and reliability.</p>
+            <p><strong>Conflict resolution:</strong> Ability to manage and resolve disputes effectively.</p>
+        </div>
+
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        function showInstructions() {
+            const instructions = document.getElementById("instructions");
+            instructions.style.display = instructions.style.display === "none" ? "block" : "none";
+        }
+
+        function calculateCompatibility() {
+            const name1 = document.getElementById("name1").value;
+            const name2 = document.getElementById("name2").value;
+
+            const traits1 = document.getElementById("traits1").value.split(',').map(s => parseFloat(s.trim()));
+            const traits2 = document.getElementById("traits2").value.split(',').map(s => parseFloat(s.trim()));
+
+            const behavior1 = document.getElementById("behavior1").value.split(',').map(s => parseFloat(s.trim()));
+            const behavior2 = document.getElementById("behavior2").value.split(',').map(s => parseFloat(s.trim()));
+
+            const interests1 = document.getElementById("interests1").value;
+            const interests2 = document.getElementById("interests2").value;
+
+            // Calculate personality compatibility
+            const maxTraitValue = 5;
+            const traitScores = traits1.map((trait, i) => 1 - Math.abs(trait - traits2[i]) / maxTraitValue);
+            const personalitySum = traitScores.reduce((sum, score) => sum + score, 0);
+
+            // Calculate behavioral compatibility
+            const behavioralScore = behavior1.map((behavior, i) => 
+                5 - Math.abs(behavior - behavior2[i])).reduce((sum, score) => sum + score, 0) / behavior1.length;
+
+            // Calculate interest compatibility
+            const interestScore = cosineSimilarity(interests1, interests2) * 100;
+
+            // Final compatibility score
+            const compatibilityScore = (0.4 * personalitySum) + (0.3 * behavioralScore) + (0.3 * interestScore / 100 * 5);
+
+            const cs9 = Math.round(compatibilityScore / 5 * 9);
+            const cs100 = Math.round(compatibilityScore / 5 * 100);
+
+            const resultDiv = document.getElementById("result");
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = `
+                <p>${name1} ${getHeartEmoji(cs100)} ${name2}</p>
+                <p>Compatibility Score: ${cs9}/9</p>
+                <div class="compatibility-meter">
+                    <div class="compatibility-fill" style="width: ${cs100}%"></div>
+                </div>
+                <p>${cs100}% Match</p>
+                <p>${getMatchDescription(cs100)}</p>
+            `;
+        }
+
+        function getHeartEmoji(score) {
+            if (score >= 80) return "💖";
+            if (score >= 60) return "💗";
+            if (score >= 40) return "💓";
+            if (score >= 20) return "💔";
+            return "💘";
+        }
+
+        function getMatchDescription(score) {
+            if (score >= 80) return "Perfect Match! The stars have aligned!";
+            if (score >= 60) return "Great potential! You complement each other well!";
+            if (score >= 40) return "There's some chemistry! Worth exploring!";
+            if (score >= 20) return "You might need to work on understanding each other better.";
+            return "Maybe just friends for now?";
+        }
+
+        function cosineSimilarity(str1, str2) {
+            const words1 = str1.toLowerCase().split(' ');
+            const words2 = str2.toLowerCase().split(' ');
+
+            const allWords = Array.from(new Set([...words1, ...words2]));
+            const vector1 = allWords.map(word => words1.includes(word) ? 1 : 0);
+            const vector2 = allWords.map(word => words2.includes(word) ? 1 : 0);
+
+            const dotProduct = vector1.reduce((sum, value, index) => sum + (value * vector2[index]), 0);
+            const magnitude1 = Math.sqrt(vector1.reduce((sum, value) => sum + value * value, 0));
+            const magnitude2 = Math.sqrt(vector2.reduce((sum, value) => sum + value * value, 0));
+
+            return dotProduct / (magnitude1 * magnitude2) || 0;
+        }
+    </script>
+</body>
+</html>
